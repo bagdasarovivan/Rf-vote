@@ -1,6 +1,6 @@
 from playwright.sync_api import sync_playwright
 
-ACCOUNTS = ["benz123" , benz1233]
+ACCOUNTS = ["benz123" , "benz1233"]
 
 def vote(login):
     with sync_playwright() as p:
