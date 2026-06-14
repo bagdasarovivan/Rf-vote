@@ -12,23 +12,41 @@ def vote(login):
         page.goto("https://cp.rfbanana.ru/index.php?do=all_vote2026")
         page.wait_for_timeout(2000)
 
-        # Вводим логин и нажимаем OK
+        # Вводим логин
         page.fill("input[type='text']", login)
         page.wait_for_timeout(500)
-        page.click("button:has-text('OK')")
+        
+        # Нажимаем OK (пробуем все варианты)
+        try:
+            page.click("input[value='OK']")
+        except:
+            try:
+                page.click("input[type='button']")
+            except:
+                page.keyboard.press("Enter")
+        
         page.wait_for_timeout(3000)
 
-        # Ищем кнопки "Vote Now"
-        vote_buttons = page.query_selector_all("button:has-text('Vote Now'), a:has-text('Vote Now'), input[value='Vote Now']")
-        
-        if not vote_buttons:
-            print(f"[{login}] Кнопки неактивны — таймер ещё не истёк")
+        # Ищем кнопки Vote Now
+        vote_buttons = page.query_selector_all("a, button, input[type='button']")
+        clicked = 0
+        for btn in vote_buttons:
+            try:
+                if not btn.is_visible():
+                    continue
+                text = btn.inner_text()
+                if "Vote" in text:
+                    btn.click()
+                    print(f"[{login}] Нажата: {text}")
+                    page.wait_for_timeout(2000)
+                    clicked += 1
+            except:
+                continue
+
+        if clicked == 0:
+            print(f"[{login}] Кнопки неактивны")
         else:
-            for btn in vote_buttons:
-                btn.click()
-                print(f"[{login}] Нажата Vote Now")
-                page.wait_for_timeout(2000)
-            print(f"[{login}] Готово! Нажато: {len(vote_buttons)}")
+            print(f"[{login}] Готово! Нажато: {clicked}")
 
         browser.close()
 
