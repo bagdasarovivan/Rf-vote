@@ -1,8 +1,14 @@
 from playwright.sync_api import sync_playwright
+import random
+import time
 
 ACCOUNTS = [
     "benz123",
+    "benz1231",
+    "benz1232",
     "benz1233",
+    "benz1234",
+    "benz1235",
 ]
 
 def vote(login):
@@ -16,7 +22,7 @@ def vote(login):
         page.fill("input[type='text']", login)
         page.wait_for_timeout(500)
         
-        # Нажимаем OK (пробуем все варианты)
+        # Нажимаем OK
         try:
             page.click("input[value='OK']")
         except:
@@ -50,5 +56,12 @@ def vote(login):
 
         browser.close()
 
+# Случайная задержка 0-10 минут перед стартом
+delay = random.randint(0, 600)
+print(f"Ждём {delay} секунд перед запуском...")
+time.sleep(delay)
+
 for account in ACCOUNTS:
     vote(account)
+    # Небольшая пауза между аккаунтами
+    time.sleep(random.randint(5, 15))
