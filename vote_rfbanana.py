@@ -10,6 +10,9 @@ ACCOUNTS = [
     "benz1234",
     "benz1235",
     "benz1236",
+    "benz1237",
+    "benz1238",
+    "benz1239",
 ]
 
 def vote(login):
